@@ -58,6 +58,23 @@ class AppointmentController {
   }
 
   /**
+   * Get appointments for a customer
+   */
+  async getCustomerAppointments(req, res) {
+    try {
+      const { customerId } = req.params;
+      const appointments = await Appointment.findAll({
+        where: { customer_id: customerId },
+        include: [{ model: Salon, as: 'salon', attributes: ['name', 'phone'] }],
+        order: [['created_at', 'DESC']],
+      });
+      res.json(appointments);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  /**
    * Move to next appointment
    */
   async next(req, res) {

@@ -22,6 +22,12 @@ router.get('/salon/:salonId', AppointmentController.getQueue);
 router.post('/salon/:salonId/next', AppointmentController.next);
 
 /**
+ * @route   GET /appointments/customer/:customerId
+ * @desc    Get all active appointments for a customer
+ */
+router.get('/customer/:customerId', AppointmentController.getCustomerAppointments);
+
+/**
  * @route   PATCH /appointments/:id/cancel
  * @desc    Cancel an appointment
  */
