@@ -2,18 +2,18 @@ import { sequelize, Salon, User, Customer, Appointment } from '../models/index.m
 
 const seedData = async () => {
   try {
-    await sequelize.sync({ force: true }); // Careful: wipes your DB!
-    console.log('[SEED] Database reset and synced.');
+    await sequelize.sync({ force: false }) // don't force sync
+    console.log('[SEED] Database synced.');
 
     // 1. Create Salons
     const salon1 = await Salon.create({
-      name: 'The Modern Barber',
+      name: 'Anny Beauty Salon',
       phone: '+123456789',
       avg_service_duration: 30
     });
 
     const salon2 = await Salon.create({
-      name: 'Elegance Salon & Spa',
+      name: 'Modern Salon & Spa',
       phone: '+987654321',
       avg_service_duration: 45
     });
@@ -21,25 +21,14 @@ const seedData = async () => {
     console.log('[SEED] Salons created.');
 
     // 2. Create Users (Staff)
-    await User.create({
-      name: 'John Doe',
-      phone: '123456',
-      role: 'OWNER',
-      salon_id: salon1.id
-    });
-
-    await User.create({
-      name: 'Jane Smith',
-      phone: '654321',
-      role: 'STAFF',
-      salon_id: salon2.id
-    });
+    await User.create({ name: 'Anny Bella', phone: '79100037', role: 'OWNER', salon_id: salon1.id });
+    await User.create({ name: 'John Smith', phone: '65234567', role: 'STAFF', salon_id: salon2.id });
 
     console.log('[SEED] Users created.');
 
     // 3. Create Sample Customers
-    const customer1 = await Customer.create({ name: 'Alice', phone: '000111' });
-    const customer2 = await Customer.create({ name: 'Bob', phone: '222333' });
+    const customer1 = await Customer.create({ name: 'Nikita Jane', phone: '12345678' });
+    const customer2 = await Customer.create({ name: 'Ineza Ninette', phone: '87654321' });
 
     console.log('[SEED] Customers created.');
 

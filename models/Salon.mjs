@@ -20,7 +20,7 @@ const Salon = sequelize.define('Salon', {
     comment: 'Average time in minutes for a haircut/service',
   },
 }, {
-  tableName: 'salons',
+  tableName: 'hairbit_salons',
   timestamps: true,
   paranoid: true
 });

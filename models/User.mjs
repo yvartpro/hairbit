@@ -29,7 +29,7 @@ const User = sequelize.define('User', {
     allowNull: false,
   },
 }, {
-  tableName: 'users',
+  tableName: 'hairbit_users',
   timestamps: true,
   paranoid: true
 });

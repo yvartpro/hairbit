@@ -7,6 +7,7 @@ let io;
  */
 export const initSocket = (server) => {
   io = new Server(server, {
+    path: '/hairbit/socket.io',
     cors: {
       origin: '*', // Adjust for production
       methods: ['GET', 'POST'],

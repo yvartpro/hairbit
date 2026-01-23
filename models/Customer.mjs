@@ -18,7 +18,7 @@ const Customer = sequelize.define('Customer', {
     },
   },
 }, {
-  tableName: 'customers',
+  tableName: 'hairbit_customers',
   timestamps: true,
   paranoid: true
 });

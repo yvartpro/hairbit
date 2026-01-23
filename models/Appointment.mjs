@@ -15,7 +15,7 @@ const Appointment = sequelize.define('Appointment', {
   started_at: { type: DataTypes.DATE },
   finished_at: { type: DataTypes.DATE },
 }, {
-  tableName: 'appointments',
+  tableName: 'hairbit_appointments',
   timestamps: true,
   paranoid: true
 });

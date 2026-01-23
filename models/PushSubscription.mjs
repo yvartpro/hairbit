@@ -13,7 +13,7 @@ const PushSubscription = sequelize.define('PushSubscription', {
   p256dh: { type: DataTypes.STRING, allowNull: false, },
   auth: { type: DataTypes.STRING, allowNull: false, },
 }, {
-  tableName: 'push_subscriptions',
+  tableName: 'hairbit_push_subscriptions',
   timestamps: true,
   paranoid: true
 });
