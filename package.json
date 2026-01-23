@@ -2,11 +2,11 @@
   "name": "hairbit-api",
   "version": "1.0.0",
   "description": "Multi-tenant hair salon queue system backend",
-  "main": "server.mjs",
+  "main": "app.mjs",
   "type": "module",
   "scripts": {
-    "start": "node server.mjs",
-    "dev": "node --watch server.mjs",
+    "start": "node app.mjs",
+    "dev": "node --watch app.mjs",
     "seed": "node scripts/seed.mjs"
   },
   "dependencies": {

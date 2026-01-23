@@ -27,11 +27,4 @@ PushSubscription.belongsTo(Customer, { foreignKey: 'customer_id', as: 'customer'
 Salon.hasMany(PushSubscription, { foreignKey: 'salon_id' });
 PushSubscription.belongsTo(Salon, { foreignKey: 'salon_id' });
 
-export {
-  sequelize,
-  Customer,
-  Salon,
-  User,
-  Appointment,
-  PushSubscription,
-};
+export { sequelize, Customer, Salon, User, Appointment, PushSubscription };

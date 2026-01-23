@@ -16,7 +16,8 @@ dotenv.config();
 
 const app = express();
 const httpServer = createServer(app);
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
+const API_BASE_URL = process.env.API_URL || 'http://localhost:4000/hairbit/api';
 
 // Middleware
 app.use(cors());
@@ -26,11 +27,12 @@ app.use(express.json());
 initSocket(httpServer);
 
 // API Routes
-app.use('/customers', customerRoutes);
-app.use('/salons', salonRoutes);
-app.use('/users', userRoutes);
-app.use('/appointments', appointmentRoutes);
-app.use('/subscriptions', subscriptionRoutes);
+app.use('/hairbit/api/customer', customerRoutes);
+app.use('/hairbit/api/salon', salonRoutes);
+app.use('/hairbit/api/user', userRoutes);
+app.use('/hairbit/api/appointment', appointmentRoutes);
+app.use('/hairbit/api/subscription', subscriptionRoutes);
+app.use('/hairbit', express.static("public"))
 
 // Health Check
 app.get('/', (req, res) => {
@@ -43,16 +45,12 @@ const startServer = async () => {
     await sequelize.authenticate();
     console.log('[DB] Connection has been established successfully.');
 
-    // In production, use migrations instead of { alter: true }
-    await sequelize.sync({ alter: true });
-    console.log('[DB] Models synchronized.');
-
     httpServer.listen(PORT, () => {
-      console.log(`[SERVER] Hairbit API running on http://localhost:${PORT}`);
+      console.log(`[SERVER] Hairbit API running on ${API_BASE_URL}`)
     });
   } catch (error) {
     console.error('[SERVER] Unable to start server:', error);
   }
 };
 
-startServer();
+startServer()
