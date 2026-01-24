@@ -7,16 +7,17 @@ let io;
  */
 export const initSocket = (server) => {
   io = new Server(server, {
-    path: '/hairbit/api/socket.io',
+    path: '/hairbit/api/socket.io/',
     pingTimeout: 60000,
     pingInterval: 25000,
     cors: {
-      origin: '*',
+      origin: ['https://capbio.bi', 'http://localhost:3000', 'http://localhost:4000'],
       methods: ['GET', 'POST'],
+      credentials: true
     },
     connectTimeout: 45000,
     allowEIO3: true,
-    transports: ['polling']
+    transports: ['polling', 'websocket']
   });
 
   io.on('connection', (socket) => {
