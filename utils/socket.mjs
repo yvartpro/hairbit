@@ -15,7 +15,8 @@ export const initSocket = (server) => {
       methods: ['GET', 'POST'],
     },
     connectTimeout: 45000,
-    allowEIO3: true
+    allowEIO3: true,
+    transports: ['polling']
   });
 
   io.on('connection', (socket) => {
