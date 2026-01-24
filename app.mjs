@@ -3,7 +3,7 @@ import { createServer } from 'http';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { sequelize } from './models/index.mjs';
-import { initSocket } from './utils/socket.mjs';
+import { initSocket, getIO } from './utils/socket.mjs';
 
 // Route Imports
 import customerRoutes from './routes/CustomerRoutes.mjs';
@@ -37,6 +37,15 @@ app.use('/hairbit', express.static("public"))
 // Health Check
 app.get('/', (req, res) => {
   res.json({ status: 'Hairbit API is running', version: '1.0.0' });
+});
+
+app.get('/debug/socket', (req, res) => {
+  const io = getIO();
+  res.json({
+    initialized: !!io,
+    path: io?.opts?.path || 'not set',
+    clients: io?.engine?.clientsCount || 0
+  });
 });
 
 // Database Sync and Server Start
