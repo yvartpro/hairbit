@@ -8,8 +8,9 @@ let io;
 export const initSocket = (server) => {
   io = new Server(server, {
     path: '/hairbit/api/socket.io/',
-    pingTimeout: 60000,
-    pingInterval: 25000,
+    pingTimeout: 60000, // 60 seconds grace period
+    pingInterval: 25000, // Send ping every 25 seconds
+    transports: ['polling', 'websocket'], // Allow both
     cors: {
       origin: ['https://capbio.bi', 'http://localhost:3000', 'http://localhost:4000'],
       methods: ['GET', 'POST'],
