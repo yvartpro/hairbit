@@ -35,11 +35,11 @@ app.use('/hairbit/api/subscription', subscriptionRoutes);
 app.use('/hairbit', express.static("public"))
 
 // Health Check
-app.get('/', (req, res) => {
+app.get('/hairbit/api', (req, res) => {
   res.json({ status: 'Hairbit API is running', version: '1.0.0' });
 });
 
-app.get('/debug/socket', (req, res) => {
+app.get('/hairbit/api/debug/socket', (req, res) => {
   const io = getIO();
   res.json({
     initialized: !!io,
