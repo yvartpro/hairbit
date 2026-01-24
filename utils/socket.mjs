@@ -8,14 +8,22 @@ let io;
 export const initSocket = (server) => {
   io = new Server(server, {
     path: '/hairbit/api/socket.io',
+    pingTimeout: 60000,
+    pingInterval: 25000,
     cors: {
-      origin: '*', // Adjust for production
+      origin: '*',
       methods: ['GET', 'POST'],
     },
+    connectTimeout: 45000,
+    allowEIO3: true
   });
 
   io.on('connection', (socket) => {
-    console.log(`[SOCKET] Client connected: ${socket.id}`);
+    console.log(`[SOCKET] Client connected: ${socket.id} (Transport: ${socket.conn.transport.name})`);
+
+    socket.conn.on('upgrade', () => {
+      console.log(`[SOCKET] Client ${socket.id} upgraded to ${socket.conn.transport.name}`);
+    });
 
     // Join salon-specific room
     socket.on('join:salon', (salonId) => {
