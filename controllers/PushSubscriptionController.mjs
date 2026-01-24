@@ -4,14 +4,13 @@ class PushSubscriptionController {
 
   async subscribe(req, res) {
     try {
-      const { customer_id, salon_id, subscription } = req.body;
-      const { endpoint, keys } = subscription;
+      const { customer_id, salon_id, endpoint, p256dh, auth } = req.body;
 
       const [sub, created] = await PushSubscription.findOrCreate({
         where: { endpoint, customer_id, salon_id },
         defaults: {
-          p256dh: keys.p256dh,
-          auth: keys.auth,
+          p256dh,
+          auth,
         }
       });
 
