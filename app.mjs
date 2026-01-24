@@ -26,15 +26,20 @@ app.use(express.json());
 // Initialize Socket.IO
 initSocket(httpServer);
 
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // API Routes
 app.use('/hairbit/api/customer', customerRoutes);
 app.use('/hairbit/api/salon', salonRoutes);
 app.use('/hairbit/api/user', userRoutes);
 app.use('/hairbit/api/appointment', appointmentRoutes);
 app.use('/hairbit/api/subscription', subscriptionRoutes);
-app.use('/hairbit', express.static("public"))
 
-// Health Check
+// Health Checks
 app.get('/hairbit/api', (req, res) => {
   res.json({ status: 'Hairbit API is running', version: '1.0.0' });
 });
@@ -46,6 +51,14 @@ app.get('/hairbit/api/debug/socket', (req, res) => {
     path: io?.opts?.path || 'not set',
     clients: io?.engine?.clientsCount || 0
   });
+});
+
+// Statics and Fallback
+app.use('/hairbit', express.static(path.join(__dirname, 'public')));
+
+// SPA Fallback: Serve index.html for any /hairbit/* route that isn't a file or API
+app.get('/hairbit/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Database Sync and Server Start
@@ -62,4 +75,4 @@ const startServer = async () => {
   }
 };
 
-startServer()
+startServer();

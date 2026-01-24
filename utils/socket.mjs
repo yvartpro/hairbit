@@ -30,13 +30,13 @@ export const initSocket = (server) => {
     // Join salon-specific room
     socket.on('join:salon', (salonId) => {
       socket.join(`salon:${salonId}`);
-      console.log(`[SOCKET] Client joined salon room: salon:${salonId}`);
+      console.log(`[SOCKET] Client ${socket.id} joined salon room: salon:${salonId}`);
     });
 
     // Join customer-specific room
     socket.on('join:customer', (customerId) => {
       socket.join(`customer:${customerId}`);
-      console.log(`[SOCKET] Client joined customer room: customer:${customerId}`);
+      console.log(`[SOCKET] Client ${socket.id} joined customer room: customer:${customerId}`);
     });
 
     socket.on('disconnect', () => {
