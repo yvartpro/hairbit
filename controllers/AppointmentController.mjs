@@ -98,23 +98,32 @@ class AppointmentController {
         nextUp.started_at = new Date();
         await nextUp.save();
 
-        // Broadcast to salon and customer
+        // 1. Notify Customer being served (Socket + Push)
         emitToRoom(`salon:${salonId}`, 'appointment:next', nextUp);
         emitToRoom(`customer:${nextUp.customer_id}`, 'appointment:active', nextUp);
 
-        // Notify next person in line (position + 1) via Web Push
+        const currentSubs = await PushSubscription.findAll({ where: { customer_id: nextUp.customer_id, salon_id: salonId } });
+        currentSubs.forEach(sub => {
+          sendPushNotification(sub, {
+            title: 'Hairbit - It\'s your turn!',
+            body: 'Please head to the counter now. We are ready for you!',
+            url: '/hairbit'
+          });
+        });
+
+        // 2. Notify the NEXT person in line (upcoming)
         const upcoming = await Appointment.findOne({
           where: { salon_id: salonId, status: 'WAITING' },
           order: [['position', 'ASC']],
         });
 
         if (upcoming) {
-          const subs = await PushSubscription.findAll({ where: { customer_id: upcoming.customer_id, salon_id: salonId } });
-          subs.forEach(sub => {
+          const upcomingSubs = await PushSubscription.findAll({ where: { customer_id: upcoming.customer_id, salon_id: salonId } });
+          upcomingSubs.forEach(sub => {
             sendPushNotification(sub, {
               title: 'Hairbit - You are next!',
-              body: 'Please head to the salon, you are next in line.',
-              url: `/salon/${salonId}`
+              body: 'You are now next in line. Please stay close.',
+              url: '/hairbit'
             });
           });
         }
