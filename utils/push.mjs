@@ -26,6 +26,7 @@ export const sendPushNotification = async (subscription, payload) => {
   }
 
   try {
+    console.log(`[PUSH] Attempting to send notification to ${subscription.endpoint}`);
     const sub = {
       endpoint: subscription.endpoint,
       keys: {
@@ -34,14 +35,14 @@ export const sendPushNotification = async (subscription, payload) => {
       },
     };
 
-    await webpush.sendNotification(sub, JSON.stringify(payload));
-    console.log(`[PUSH] Sent notification to ${subscription.endpoint}`);
+    const response = await webpush.sendNotification(sub, JSON.stringify(payload));
+    console.log(`[PUSH] Success! Sent notification to ${subscription.endpoint}. Status: ${response.statusCode}`);
   } catch (error) {
     if (error.statusCode === 404 || error.statusCode === 410) {
-      console.log('[PUSH] Subscription expired or no longer valid.');
+      console.warn(`[PUSH] Subscription expired or no longer valid for ${subscription.endpoint}`);
       // Ideally delete subscription from DB here
     } else {
-      console.error('[PUSH] Error sending notification:', error);
+      console.error('[PUSH] CRITICAL: Error sending notification:', error.message || error);
     }
   }
 };

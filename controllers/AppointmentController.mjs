@@ -98,11 +98,16 @@ class AppointmentController {
         nextUp.started_at = new Date();
         await nextUp.save();
 
+        console.log(`[QUEUE] Advancing queue for salon ${salonId}. Next up: Customer ${nextUp.customer_id}`);
         // 1. Notify Customer being served (Socket + Push)
+        console.log(`[SOCKET] Emitting appointment:next to salon:${salonId}`);
         emitToRoom(`salon:${salonId}`, 'appointment:next', nextUp);
+
+        console.log(`[SOCKET] Emitting appointment:active to customer:${nextUp.customer_id}`);
         emitToRoom(`customer:${nextUp.customer_id}`, 'appointment:active', nextUp);
 
         const currentSubs = await PushSubscription.findAll({ where: { customer_id: nextUp.customer_id, salon_id: salonId } });
+        console.log(`[PUSH] Found ${currentSubs.length} subscriptions for customer ${nextUp.customer_id}`);
         currentSubs.forEach(sub => {
           sendPushNotification(sub, {
             title: 'Hairbit - It\'s your turn!',
@@ -118,7 +123,9 @@ class AppointmentController {
         });
 
         if (upcoming) {
+          console.log(`[QUEUE] Upcoming customer: ${upcoming.customer_id}`);
           const upcomingSubs = await PushSubscription.findAll({ where: { customer_id: upcoming.customer_id, salon_id: salonId } });
+          console.log(`[PUSH] Found ${upcomingSubs.length} subscriptions for upcoming customer ${upcoming.customer_id}`);
           upcomingSubs.forEach(sub => {
             sendPushNotification(sub, {
               title: 'Hairbit - You are next!',

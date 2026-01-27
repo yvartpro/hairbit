@@ -7,7 +7,7 @@ let io;
  */
 export const initSocket = (server) => {
   io = new Server(server, {
-    path: '/hairbit/api/socket.io/',
+    path: '/hairbit/api/socket.io',
     pingTimeout: 60000, // 60 seconds grace period
     pingInterval: 25000, // Send ping every 25 seconds
     transports: ['polling', 'websocket'], // Allow both
@@ -23,6 +23,7 @@ export const initSocket = (server) => {
 
   io.on('connection', (socket) => {
     console.log(`[SOCKET] Client connected: ${socket.id} (Transport: ${socket.conn.transport.name})`);
+    console.log(`[SOCKET] Handshake query:`, socket.handshake.query);
 
     socket.conn.on('upgrade', () => {
       console.log(`[SOCKET] Client ${socket.id} upgraded to ${socket.conn.transport.name}`);
@@ -53,7 +54,10 @@ export const initSocket = (server) => {
  */
 export const emitToRoom = (room, event, data) => {
   if (io) {
+    console.log(`[SOCKET] Broadcasting ${event} to ${room}`);
     io.to(room).emit(event, data);
+  } else {
+    console.warn(`[SOCKET] Cannot emit ${event} to ${room}: IO not initialized`);
   }
 };
 
