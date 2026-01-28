@@ -12,7 +12,10 @@ export const initSocket = (server) => {
     pingInterval: 25000, // Send ping every 25 seconds
     transports: ['polling', 'websocket'], // Allow both
     cors: {
-      origin: ['https://capbio.bi', 'http://localhost:3000', 'http://localhost:4000'],
+      origin: (origin, callback) => {
+        // Allow all origins for now to solve connection reset issues
+        callback(null, true);
+      },
       methods: ['GET', 'POST'],
       credentials: true
     },

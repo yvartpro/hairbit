@@ -23,6 +23,12 @@ const API_BASE_URL = process.env.API_URL || 'http://localhost:4000/hairbit/api';
 app.use(cors());
 app.use(express.json());
 
+// Log all requests
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
+
 // Initialize Socket.IO
 initSocket(httpServer);
 
