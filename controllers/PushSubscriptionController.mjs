@@ -8,10 +8,7 @@ class PushSubscriptionController {
 
       const [sub, created] = await PushSubscription.findOrCreate({
         where: { endpoint, customer_id, salon_id },
-        defaults: {
-          p256dh,
-          auth,
-        }
+        defaults: { p256dh, auth }
       });
 
       res.status(201).json(sub);
@@ -24,7 +21,7 @@ class PushSubscriptionController {
     try {
       const { endpoint } = req.body;
       await PushSubscription.destroy({ where: { endpoint } });
-      res.json({ message: 'Unsubscribed successfully' });
+      res.json({ message: 'Deconnexion réussie' });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
